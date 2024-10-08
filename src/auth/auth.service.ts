@@ -18,11 +18,11 @@ export class AuthService {
     const user = await this.usersService.findOneByEmail(email);
 
     if (user === null) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('Wrong email or password');
     }
 
     if (!bcrypt.compareSync(password, user.passwordHash)) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('Wrong email or password');
     }
 
     return {

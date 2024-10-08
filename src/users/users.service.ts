@@ -1,10 +1,9 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { CreateUserDto } from '../dto/create-user.dto';
+import { UpdateUserDto } from '../dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from 'src/entities/user.entity';
-import * as bcrypt from 'bcrypt';
 import 'dotenv/config';
 
 @Injectable()
@@ -14,15 +13,8 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    const passwordHash = bcrypt.hashSync(createUserDto.password, 10);
-
     try {
-      return await this.usersRepository.save({
-        firstName: createUserDto.firstName,
-        lastName: createUserDto.lastName,
-        email: createUserDto.email,
-        passwordHash,
-      });
+      return await this.usersRepository.save(createUserDto);
     } catch {
       throw new BadRequestException('Could not create account');
     }
@@ -41,22 +33,8 @@ export class UsersService {
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
-    let passwordHash: string;
-
-    if (updateUserDto.password) {
-      passwordHash = bcrypt.hashSync(updateUserDto.password, 10);
-    }
-
     try {
-      return await this.usersRepository.update(
-        { id: id },
-        {
-          firstName: updateUserDto.firstName,
-          lastName: updateUserDto.lastName,
-          email: updateUserDto.email,
-          passwordHash,
-        },
-      );
+      return await this.usersRepository.update(id, updateUserDto);
     } catch {
       throw new BadRequestException('Could not update account');
     }

@@ -27,12 +27,12 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
-  @Get(':id')
+  @Get('id/:id')
   findOneById(@Param('id') id: string) {
     return this.usersService.findOneById(+id);
   }
 
-  @Get(':email')
+  @Get('email/:email')
   findOneByEmail(@Param('email') email: string) {
     return this.usersService.findOneByEmail(email);
   }

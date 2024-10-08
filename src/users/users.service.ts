@@ -14,12 +14,7 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    const salt = bcrypt.genSaltSync();
-
-    const passwordHash = bcrypt.hashSync(
-      createUserDto.password,
-      bcrypt.hashSync(process.env.BCRYPT_SECRET, salt),
-    );
+    const passwordHash = bcrypt.hashSync(createUserDto.password, 10);
 
     try {
       return await this.usersRepository.save({
@@ -27,10 +22,9 @@ export class UsersService {
         lastName: createUserDto.lastName,
         email: createUserDto.email,
         passwordHash,
-        salt,
       });
     } catch {
-      throw new BadRequestException('Could not create');
+      throw new BadRequestException('Could not create account');
     }
   }
 
@@ -43,16 +37,32 @@ export class UsersService {
   }
 
   findOneByEmail(email: string) {
-    console.log(email);
     return this.usersRepository.findOneBy({ email: email });
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    console.log(updateUserDto);
-    return `This action updates a #${id} user`;
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    let passwordHash: string;
+
+    if (updateUserDto.password) {
+      passwordHash = bcrypt.hashSync(updateUserDto.password, 10);
+    }
+
+    try {
+      return await this.usersRepository.update(
+        { id: id },
+        {
+          firstName: updateUserDto.firstName,
+          lastName: updateUserDto.lastName,
+          email: updateUserDto.email,
+          passwordHash,
+        },
+      );
+    } catch {
+      throw new BadRequestException('Could not update account');
+    }
   }
 
   remove(id: number) {
-    return `This action removes a #${id} user`;
+    return this.usersRepository.delete({ id: id });
   }
 }

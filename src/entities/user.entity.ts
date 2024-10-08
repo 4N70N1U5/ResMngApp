@@ -29,10 +29,6 @@ export class User {
   @ApiProperty()
   passwordHash: string;
 
-  @Column()
-  @ApiProperty()
-  salt: string;
-
   @CreateDateColumn()
   @ApiProperty()
   createdAt: Date;

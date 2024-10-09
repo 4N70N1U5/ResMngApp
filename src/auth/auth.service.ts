@@ -94,6 +94,46 @@ export class AuthService {
     };
   }
 
+  async setPassword(
+    id: number,
+    password: string,
+  ): Promise<{ accessToken: string; refreshToken: string }> {
+    const user = await this.usersService.findOneById(id);
+
+    if (user === null) {
+      throw new UnauthorizedException('Invalid user');
+    }
+
+    const passwordHash = await bcrypt.hash(password, 10);
+
+    const refreshToken = this.jwtService.sign(
+      {
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+      },
+      { expiresIn: '7d' },
+    );
+
+    const refreshTokenHash = await bcrypt.hash(refreshToken, 10);
+
+    this.usersService.update(user.id, { passwordHash, refreshTokenHash });
+
+    return {
+      accessToken: this.jwtService.sign(
+        {
+          id: user.id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+        },
+        { expiresIn: '15m' },
+      ),
+      refreshToken,
+    };
+  }
+
   async refresh(refreshToken: string): Promise<{ accessToken: string }> {
     try {
       const payload = this.jwtService.verify(refreshToken);

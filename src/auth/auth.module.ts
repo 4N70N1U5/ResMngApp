@@ -10,7 +10,7 @@ import 'dotenv/config';
     JwtModule.register({
       global: true,
       secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '15m' },
+      // signOptions: { expiresIn: '15m' },
     }),
     UsersModule,
   ],

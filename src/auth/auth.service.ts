@@ -14,28 +14,51 @@ export class AuthService {
   async login(
     email: string,
     password: string,
-  ): Promise<{ accessToken: string }> {
+  ): Promise<{ accessToken: string; refreshToken: string }> {
     const user = await this.usersService.findOneByEmail(email);
 
     if (user === null) {
       throw new UnauthorizedException('Wrong email or password');
     }
 
-    if (!(await bcrypt.compare(password, user.passwordHash))) {
+    if (
+      user.passwordHash === null ||
+      !(await bcrypt.compare(password, user.passwordHash))
+    ) {
       throw new UnauthorizedException('Wrong email or password');
     }
 
-    return {
-      accessToken: this.jwtService.sign({
+    const refreshToken = this.jwtService.sign(
+      {
         id: user.id,
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
-      }),
+      },
+      { expiresIn: '7d' },
+    );
+
+    const refreshTokenHash = await bcrypt.hash(refreshToken, 10);
+
+    this.usersService.update(user.id, { refreshTokenHash });
+
+    return {
+      accessToken: this.jwtService.sign(
+        {
+          id: user.id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+        },
+        { expiresIn: '15m' },
+      ),
+      refreshToken,
     };
   }
 
-  async register(registerDto: RegisterDto): Promise<{ accessToken: string }> {
+  async register(
+    registerDto: RegisterDto,
+  ): Promise<{ accessToken: string; refreshToken: string }> {
     const passwordHash = await bcrypt.hash(registerDto.password, 10);
 
     const user = await this.usersService.create({
@@ -43,13 +66,62 @@ export class AuthService {
       passwordHash,
     });
 
-    return {
-      accessToken: this.jwtService.sign({
+    const refreshToken = this.jwtService.sign(
+      {
         id: user.id,
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
-      }),
+      },
+      { expiresIn: '7d' },
+    );
+
+    const refreshTokenHash = await bcrypt.hash(refreshToken, 10);
+
+    this.usersService.update(user.id, { refreshTokenHash });
+
+    return {
+      accessToken: this.jwtService.sign(
+        {
+          id: user.id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+        },
+        { expiresIn: '15m' },
+      ),
+      refreshToken,
     };
+  }
+
+  async refresh(refreshToken: string): Promise<{ accessToken: string }> {
+    try {
+      const payload = this.jwtService.verify(refreshToken);
+
+      const user = await this.usersService.findOneById(payload.id);
+
+      if (
+        user === null ||
+        user.refreshTokenHash === null ||
+        !(await bcrypt.compare(refreshToken, user.refreshTokenHash))
+      ) {
+        this.usersService.update(user.id, { refreshTokenHash: null });
+        throw new UnauthorizedException('Invalid refresh token');
+      }
+
+      return {
+        accessToken: this.jwtService.sign(
+          {
+            id: user.id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+          },
+          { expiresIn: '15m' },
+        ),
+      };
+    } catch {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
   }
 }

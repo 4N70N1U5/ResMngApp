@@ -1,10 +1,15 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UsersModule } from './users/users.module';
+import { UsersModule } from './modules/users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthModule } from './auth/auth.module';
+import { AuthModule } from './modules/auth/auth.module';
 // import { User } from './entities/user.entity';
+import { ClientsModule } from './modules/clients/clients.module';
+import { ProjectsModule } from './modules/projects/projects.module';
+import { BookingsModule } from './modules/bookings/bookings.module';
+import { TeamsModule } from './modules/teams/teams.module';
+import { TimesheetEntriesModule } from './modules/timesheet-entries/timesheet-entries.module';
 
 @Module({
   imports: [
@@ -21,6 +26,11 @@ import { AuthModule } from './auth/auth.module';
     }),
     AuthModule,
     UsersModule,
+    ClientsModule,
+    ProjectsModule,
+    BookingsModule,
+    TeamsModule,
+    TimesheetEntriesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -2,10 +2,16 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinTable,
+  ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
+import { Booking } from './booking.entity';
+import { TimesheetEntry } from './timesheet-entry.entity';
+import { Team } from './team.entity';
 
 @Entity()
 export class User {
@@ -25,9 +31,29 @@ export class User {
   @ApiProperty()
   email: string;
 
-  @Column()
+  @Column({ default: null })
   @ApiProperty()
   passwordHash: string;
+
+  @Column({ default: null })
+  @ApiProperty()
+  refreshTokenHash: string;
+
+  @ManyToMany(() => Team, (team) => team.users)
+  @JoinTable({ name: 'user_team' })
+  teams: Team[];
+
+  @ManyToMany(() => Booking, (booking) => booking.users)
+  @JoinTable({ name: 'user_booking' })
+  bookings: Booking[];
+
+  @OneToMany(() => TimesheetEntry, (timesheetEntry) => timesheetEntry.user)
+  @ApiProperty()
+  timesheetEntries: TimesheetEntry[];
+
+  // @OneToMany(() => Booking, (booking) => booking.booker)
+  // @ApiProperty()
+  // bookerOf: Booking[];
 
   @CreateDateColumn()
   @ApiProperty()

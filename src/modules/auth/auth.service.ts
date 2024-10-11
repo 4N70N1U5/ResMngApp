@@ -31,8 +31,8 @@ export class AuthService {
     const refreshToken = this.jwtService.sign(
       {
         id: user.id,
-        firstName: user.firstName,
-        lastName: user.lastName,
+        // firstName: user.firstName,
+        // lastName: user.lastName,
         email: user.email,
       },
       { expiresIn: '7d' },
@@ -46,8 +46,8 @@ export class AuthService {
       accessToken: this.jwtService.sign(
         {
           id: user.id,
-          firstName: user.firstName,
-          lastName: user.lastName,
+          // firstName: user.firstName,
+          // lastName: user.lastName,
           email: user.email,
         },
         { expiresIn: '15m' },
@@ -69,8 +69,8 @@ export class AuthService {
     const refreshToken = this.jwtService.sign(
       {
         id: user.id,
-        firstName: user.firstName,
-        lastName: user.lastName,
+        // firstName: user.firstName,
+        // lastName: user.lastName,
         email: user.email,
       },
       { expiresIn: '7d' },
@@ -84,8 +84,8 @@ export class AuthService {
       accessToken: this.jwtService.sign(
         {
           id: user.id,
-          firstName: user.firstName,
-          lastName: user.lastName,
+          // firstName: user.firstName,
+          // lastName: user.lastName,
           email: user.email,
         },
         { expiresIn: '15m' },
@@ -109,8 +109,8 @@ export class AuthService {
     const refreshToken = this.jwtService.sign(
       {
         id: user.id,
-        firstName: user.firstName,
-        lastName: user.lastName,
+        // firstName: user.firstName,
+        // lastName: user.lastName,
         email: user.email,
       },
       { expiresIn: '7d' },
@@ -124,8 +124,8 @@ export class AuthService {
       accessToken: this.jwtService.sign(
         {
           id: user.id,
-          firstName: user.firstName,
-          lastName: user.lastName,
+          // firstName: user.firstName,
+          // lastName: user.lastName,
           email: user.email,
         },
         { expiresIn: '15m' },
@@ -153,8 +153,8 @@ export class AuthService {
         accessToken: this.jwtService.sign(
           {
             id: user.id,
-            firstName: user.firstName,
-            lastName: user.lastName,
+            // firstName: user.firstName,
+            // lastName: user.lastName,
             email: user.email,
           },
           { expiresIn: '15m' },

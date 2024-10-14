@@ -19,7 +19,7 @@ export class MembershipsService {
     });
   }
 
-  findRole(userId: number, teamId: number) {
+  find(userId: number, teamId: number) {
     return this.membershipRepository.findOneBy({ userId, teamId });
   }
 }

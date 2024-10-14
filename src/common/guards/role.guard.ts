@@ -21,15 +21,15 @@ export class RoleGuard implements CanActivate {
 
     const { user, params } = context.switchToHttp().getRequest();
 
-    const userRoleInTeam = await this.membershipsService.findRole(
+    const membership = await this.membershipsService.find(
       user.id,
       params.teamId,
     );
 
-    console.log(user, params, userRoleInTeam);
+    console.log(user, params, membership);
 
-    if (!userRoleInTeam) return false;
+    if (!membership) return false;
 
-    return requiredRoles.includes(userRoleInTeam.role);
+    return requiredRoles.includes(membership.role);
   }
 }

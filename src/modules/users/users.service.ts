@@ -13,11 +13,11 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    try {
-      return await this.usersRepository.save(createUserDto);
-    } catch {
+    if (await this.usersRepository.findOneBy({ email: createUserDto.email })) {
       throw new BadRequestException('Could not create account');
     }
+
+    return await this.usersRepository.save(createUserDto);
   }
 
   findAll() {

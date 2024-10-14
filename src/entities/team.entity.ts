@@ -20,7 +20,7 @@ export class Team {
   @Column()
   name: string;
 
-  @Column()
+  @Column({ unique: true })
   ownerId: number;
 
   @OneToOne(() => User)

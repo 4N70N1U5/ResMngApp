@@ -12,12 +12,19 @@ export class ClientsService {
     private readonly clientRepository: Repository<Client>,
   ) {}
 
-  create(createClientDto: CreateClientDto) {
-    return this.clientRepository.save(createClientDto);
+  create(createClientDto: CreateClientDto, teamId: number) {
+    return this.clientRepository.save({ ...createClientDto, teamId });
   }
 
   findAll() {
     return this.clientRepository.find({ relations: { projects: true } });
+  }
+
+  findAllByTeamId(teamId: number) {
+    return this.clientRepository.find({
+      where: { teamId },
+      relations: { projects: true },
+    });
   }
 
   findOne(id: number) {

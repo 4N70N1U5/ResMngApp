@@ -1,8 +1,8 @@
 import { UserRoles } from 'src/enums/user-roles.enum';
 import { Column, Entity, PrimaryColumn } from 'typeorm';
 
-@Entity({ name: 'user_team' })
-export class UserTeam {
+@Entity({ name: 'membership' })
+export class Membership {
   @PrimaryColumn()
   userId: number;
 

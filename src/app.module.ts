@@ -10,6 +10,8 @@ import { ProjectsModule } from './modules/projects/projects.module';
 import { BookingsModule } from './modules/bookings/bookings.module';
 import { TeamsModule } from './modules/teams/teams.module';
 import { TimesheetEntriesModule } from './modules/timesheet-entries/timesheet-entries.module';
+// import { MembershipsService } from './modules/memberships/memberships.service';
+import { MembershipsModule } from './modules/memberships/memberships.module';
 
 @Module({
   imports: [
@@ -31,6 +33,7 @@ import { TimesheetEntriesModule } from './modules/timesheet-entries/timesheet-en
     BookingsModule,
     TeamsModule,
     TimesheetEntriesModule,
+    MembershipsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

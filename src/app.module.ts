@@ -17,12 +17,11 @@ import { MembershipsModule } from './modules/memberships/memberships.module';
   imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'express',
-      password: 'express',
-      database: 'resmngapp',
-      // entities: [User],
+      host: process.env.DB_CONNECTION_HOST,
+      port: +process.env.DB_CONNECTION_PORT,
+      username: process.env.DB_CONNECTION_USERNAME,
+      password: process.env.DB_CONNECTION_PASSWORD,
+      database: process.env.DB_CONNECTION_DATABASE,
       autoLoadEntities: true,
       synchronize: true,
     }),

@@ -40,7 +40,7 @@ export class User {
   refreshTokenHash: string;
 
   @ManyToMany(() => Team, (team) => team.users)
-  @JoinTable({ name: 'user_team' })
+  @JoinTable({ name: 'membership' })
   teams: Team[];
 
   @ManyToMany(() => Booking, (booking) => booking.users)

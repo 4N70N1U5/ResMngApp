@@ -12,14 +12,14 @@ import { TeamsService } from './teams.service';
 import { CreateTeamDto } from '../../dto/create-team.dto';
 import { UpdateTeamDto } from '../../dto/update-team.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { AuthGuard } from 'src/common/guards/auth.guard';
-import { RoleGuard } from 'src/common/guards/role.guard';
-import { Roles } from 'src/common/decorators/roles.decorator';
-import { UserRoles } from 'src/enums/user-roles.enum';
+import { AuthGuard } from '../../common/guards/auth.guard';
+import { RoleGuard } from '../../common/guards/role.guard';
+import { Roles } from '../../common/decorators/roles.decorator';
+import { UserRoles } from '../../enums/user-roles.enum';
 import { ClientsService } from '../clients/clients.service';
-import { CurrentUser } from 'src/common/decorators/current-user.decorator';
-import { User } from 'src/entities/user.entity';
-import { CreateClientDto } from 'src/dto/create-client.dto';
+import { CurrentUser } from '../../common/decorators/current-user.decorator';
+import { User } from '../../entities/user.entity';
+import { CreateClientDto } from '../../dto/create-client.dto';
 
 @Controller('teams')
 @ApiTags('Teams')

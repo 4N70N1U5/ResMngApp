@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateTimesheetEntryDto } from '../../dto/create-timesheet-entry.dto';
 import { UpdateTimesheetEntryDto } from '../../dto/update-timesheet-entry.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { TimesheetEntry } from 'src/entities/timesheet-entry.entity';
+import { TimesheetEntry } from '../../entities/timesheet-entry.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()

@@ -2,12 +2,12 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateTeamDto } from '../../dto/create-team.dto';
 import { UpdateTeamDto } from '../../dto/update-team.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Team } from 'src/entities/team.entity';
+import { Team } from '../../entities/team.entity';
 import { Repository } from 'typeorm';
-import { User } from 'src/entities/user.entity';
-// import { Membership } from 'src/entities/membership.entity';
-import { UserRoles } from 'src/enums/user-roles.enum';
-import { MembershipsService } from 'src/modules/memberships/memberships.service';
+import { User } from '../../entities/user.entity';
+// import { Membership } from '../../entities/membership.entity';
+import { UserRoles } from '../../enums/user-roles.enum';
+import { MembershipsService } from '../../modules/memberships/memberships.service';
 
 @Injectable()
 export class TeamsService {

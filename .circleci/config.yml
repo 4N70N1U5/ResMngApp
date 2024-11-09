@@ -44,8 +44,7 @@ jobs:
       - image: cimg/base:stable
     executor: node/default
     steps:
-      - setup_remote_docker:
-          version: 20.10.7
+      - setup_remote_docker
       - checkout
       - run:
           name: Authenticate with Docker Hub
@@ -56,7 +55,23 @@ jobs:
       - run:
           name: Push Docker image
           command: docker push "$DOCKERHUB_USERNAME/ResMngApp:latest"
+    lint:
+      executor: node/default
+      steps:
+        - checkout
+        - node/install-packages:
+            pkg-manager: npm
+        - run:
+            name: Run ESLint
+            command: npx eslint . --max-warnings=0
+        - store_artifacts:
+            path: .eslintcache
+        - store_test_results:
+            path: ./eslint-reports
 workflows:
+  linting:
+    jobs:
+      - lint
   build-and-test:
     jobs:
       - test-node

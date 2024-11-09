@@ -66,6 +66,27 @@ jobs:
           command: npx eslint . --format stylish > eslint-report.txt
       - store_artifacts:
           path: eslint-report.txt
+
+  deploy-heroku:
+    docker:
+      - image: cimg/base:stable
+    executor: node/default
+    steps:
+      - setup_remote_docker:
+          version: 20.10.7
+          docker_layer_caching: true
+      - checkout
+      - run:
+          name: Authenticate with Heroku
+          command: echo "$HEROKU_API_KEY" | docker login --username=_ --password-stdin registry.heroku.com
+      - run:
+          name: Tag Docker image for Heroku
+          command: docker tag "$DOCKERHUB_USERNAME/resmngapp:latest" registry.heroku.com/<heroku-app-name>/web
+      - run:
+          name: Push Docker image to Heroku
+          command: docker push registry.heroku.com/<heroku-app-name>/web
+
+
 workflows:
   lint-test-build:
     jobs:
@@ -91,4 +112,11 @@ workflows:
           requires:
             - lint
             - test-node
+      - deploy-heroku:
+          filters:
+            branches:
+              only:
+                - main
+          requires:
+            - deploy-docker
           type: approval

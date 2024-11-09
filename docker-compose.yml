@@ -5,7 +5,9 @@ services:
     ports:
       - '3000:3000'
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+        restart: true
     env_file:
       - .env
     volumes:
@@ -25,6 +27,17 @@ services:
     volumes:
       - resmngapp_db_data:/var/lib/mysql
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test:
+        [
+          'CMD-SHELL',
+          "mysql -u${DB_CONNECTION_USERNAME} -p${DB_CONNECTION_PASSWORD} -e'USE ${DB_CONNECTION_DATABASE}'",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+      start_interval: 5s
 
 volumes:
   resmngapp_db_data:

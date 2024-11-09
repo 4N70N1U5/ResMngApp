@@ -63,10 +63,7 @@ jobs:
           pkg-manager: npm
       - run:
           name: Save ESLint report
-          command: npx eslint . --format stylish > eslint-report.txt 2>&1
-      - run:
-          name: Print ESLint report to console
-          command: cat eslint-report.txt
+          command: npx eslint . --format stylish > eslint-report.txt
       - store_artifacts:
           path: eslint-report.txt
 workflows:

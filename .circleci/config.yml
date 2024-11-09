@@ -67,18 +67,28 @@ jobs:
       - store_artifacts:
           path: eslint-report.txt
 workflows:
-  linting:
+  lint-test-build:
     jobs:
       - lint
-  build-and-test:
-    jobs:
       - test-node
       - build-node:
+          filters:
+            branches:
+              only:
+                - main
           requires:
+            - lint
             - test-node
-  deploy-docker:
+  deploy:
     jobs:
+      - lint
       - test-node
       - deploy-docker:
+          filters:
+            branches:
+              only:
+                - main
           requires:
+            - lint
             - test-node
+          type: approval

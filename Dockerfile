@@ -7,14 +7,14 @@ WORKDIR /usr/src/app
 # Copy package.json and package-lock.json to the working directory
 COPY package*.json ./
 
-# Install dependencies
+# Install dependencies, including native ones
 RUN npm install
+
+# Rebuild any native dependencies (like bcrypt)
+RUN npm rebuild bcrypt --build-from-source
 
 # Copy the rest of the application code to the working directory
 COPY . .
-
-# If there is a build step (e.g., for TypeScript or a React app), include it here
-RUN npm run build  # Only if your app needs a build step
 
 # Expose the port the app runs on
 EXPOSE 3000

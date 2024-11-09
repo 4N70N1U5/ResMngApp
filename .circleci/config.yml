@@ -65,6 +65,7 @@ workflows:
             - test-node
   deploy-docker:
     jobs:
+      - test-node
       - deploy-docker:
           requires:
             - test-node

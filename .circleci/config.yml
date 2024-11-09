@@ -63,14 +63,12 @@ jobs:
           pkg-manager: npm
       - run:
           name: Run ESLint and output report
-          command: npx eslint . --output-file eslint-report.json --format json
-      - store_artifacts:
-          path: eslint-report.json
+          command: npx eslint . --max-warnings=0
       - run:
-          name: Convert ESLint output to JUnit format
-          command: npx eslint . --format junit --output-file eslint-report.xml
-      - store_test_results:
-          path: eslint-report.xml
+          name: Save ESLint report
+          command: npx eslint . --format stylish > eslint-report.txt
+      - store_artifacts:
+          path: eslint-report.txt
 workflows:
   linting:
     jobs:

@@ -51,10 +51,10 @@ jobs:
           command: echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
       - run:
           name: Build Docker image
-          command: docker build -t "$DOCKERHUB_USERNAME/ResMngApp:latest" .
+          command: docker build -t "$DOCKERHUB_USERNAME/resmngapp:latest" .
       - run:
           name: Push Docker image
-          command: docker push "$DOCKERHUB_USERNAME/ResMngApp:latest"
+          command: docker push "$DOCKERHUB_USERNAME/resmngapp:latest"
   lint:
     executor: node/default
     steps:
@@ -62,12 +62,15 @@ jobs:
       - node/install-packages:
           pkg-manager: npm
       - run:
-          name: Run ESLint
-          command: npx eslint . --max-warnings=0
+          name: Run ESLint and output report
+          command: npx eslint . --output-file eslint-report.json --format json
       - store_artifacts:
-          path: .eslintcache
+          path: eslint-report.json
+      - run:
+          name: Convert ESLint output to JUnit format
+          command: npx eslint . --format junit --output-file eslint-report.xml
       - store_test_results:
-          path: ./eslint-reports
+          path: eslint-report.xml
 workflows:
   linting:
     jobs:

@@ -55,19 +55,19 @@ jobs:
       - run:
           name: Push Docker image
           command: docker push "$DOCKERHUB_USERNAME/ResMngApp:latest"
-    lint:
-      executor: node/default
-      steps:
-        - checkout
-        - node/install-packages:
-            pkg-manager: npm
-        - run:
-            name: Run ESLint
-            command: npx eslint . --max-warnings=0
-        - store_artifacts:
-            path: .eslintcache
-        - store_test_results:
-            path: ./eslint-reports
+  lint:
+    executor: node/default
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: npm
+      - run:
+          name: Run ESLint
+          command: npx eslint . --max-warnings=0
+      - store_artifacts:
+          path: .eslintcache
+      - store_test_results:
+          path: ./eslint-reports
 workflows:
   linting:
     jobs:

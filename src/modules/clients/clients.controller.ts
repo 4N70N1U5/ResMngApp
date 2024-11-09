@@ -17,10 +17,13 @@ import { ApiTags } from '@nestjs/swagger';
 export class ClientsController {
   constructor(private readonly clientsService: ClientsService) {}
 
-  // @Post()
-  // create(@Body() createClientDto: CreateClientDto) {
-  //   return this.clientsService.create(createClientDto);
-  // }
+  @Post(':teamId')
+  create(
+    @Body() createClientDto: CreateClientDto,
+    @Param('teamId') teamId: string,
+  ) {
+    return this.clientsService.create(createClientDto, +teamId);
+  }
 
   @Get()
   findAll() {

@@ -62,13 +62,13 @@ jobs:
       - node/install-packages:
           pkg-manager: npm
       - run:
-          name: Run ESLint and output report
-          command: npx eslint . --max-warnings=0
-      - run:
           name: Save ESLint report
           command: npx eslint . --format stylish > eslint-report.txt
       - store_artifacts:
           path: eslint-report.txt
+      - run:
+          name: Run ESLint and output report
+          command: npx eslint . --max-warnings=0
 workflows:
   linting:
     jobs:

@@ -3,6 +3,7 @@
 version: 2.1
 orbs:
   node: circleci/node@5
+  heroku: circleci/heroku@2.0.0
 jobs:
   test-node:
     # Install node dependencies and run tests
@@ -67,25 +68,17 @@ jobs:
       - store_artifacts:
           path: eslint-report.txt
 
-  deploy-heroku:
-    docker:
-      - image: cimg/base:stable
-    executor: node/default
-    steps:
-      - setup_remote_docker:
-          version: 20.10.7
-          docker_layer_caching: true
-      - checkout
-      - run:
-          name: Authenticate with Heroku
-          command: echo "$HEROKU_API_KEY" | docker login --username=_ --password-stdin registry.heroku.com
-      - run:
-          name: Tag Docker image for Heroku
-          command: docker tag "$DOCKERHUB_USERNAME/resmngapp:latest" registry.heroku.com/<heroku-app-name>/web
-      - run:
-          name: Push Docker image to Heroku
-          command: docker push registry.heroku.com/<heroku-app-name>/web
-
+  # deploy-heroku:
+  #   docker:
+  #     - image: cimg/base:stable
+  #   executor: node/default
+  #   steps:
+  #     - setup_remote_docker
+  #     - checkout
+  #     - run:
+  #         name: Authenticate with Heroku
+  #         command: git push https://git.heroku.com/$HEROKU_APP_NAME.git main
+      
 
 workflows:
   lint-test-build:
@@ -112,7 +105,8 @@ workflows:
           requires:
             - lint
             - test-node
-      - deploy-heroku:
+          type: approval
+      - heroku/deploy-via-git:
           filters:
             branches:
               only:

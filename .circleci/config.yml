@@ -67,4 +67,4 @@ workflows:
     jobs:
       - deploy-docker:
           requires:
-            - build-node
+            - test-node

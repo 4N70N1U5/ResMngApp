@@ -17,13 +17,9 @@ import { MembershipsModule } from './modules/memberships/memberships.module';
   imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: process.env.DB_CONNECTION_HOST,
-      port: +process.env.DB_CONNECTION_PORT,
-      username: process.env.DB_CONNECTION_USERNAME,
-      password: process.env.DB_CONNECTION_PASSWORD,
-      database: process.env.DB_CONNECTION_DATABASE,
-      autoLoadEntities: true,
+      url: process.env.JAWSDB_URL,
       synchronize: true,
+      logging: true,
     }),
     AuthModule,
     UsersModule,

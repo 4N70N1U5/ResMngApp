@@ -68,7 +68,7 @@ jobs:
           path: eslint-report.txt
   deploy-heroku:
     docker:
-      - image: circleci/heroku-cli:latest
+      - image: cimg/base:stable
     executor: node/default
     steps:
       - checkout
@@ -86,7 +86,7 @@ jobs:
           name: Deploy to Heroku
           command: |
             git remote add heroku https://git.heroku.com/$HEROKU_APP_NAME.git
-            git push heroku main   
+            git push heroku main
 
 workflows:
   lint-test-build:

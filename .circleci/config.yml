@@ -105,14 +105,12 @@ workflows:
             - lint
             - test-node
           type: approval
-
-  deploy-heroku:
-    jobs:
-      - build-node
       - deploy-heroku:
-          requires:
-            - build-node
           filters:
             branches:
               only:
                 - main
+          requires:
+            - lint
+            - test-node
+          type: approval

@@ -80,6 +80,9 @@ jobs:
           name: Login to Heroku
           command: echo "$HEROKU_API_KEY" | heroku auth:token
       - run:
+          name: Verify Heroku Login
+          command: heroku auth:whoami
+      - run:
           name: Deploy to Heroku
           command: |
             git remote add heroku https://git.heroku.com/$HEROKU_APP_NAME.git

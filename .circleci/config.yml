@@ -66,33 +66,24 @@ jobs:
           command: npx eslint . --format stylish > eslint-report.txt
       - store_artifacts:
           path: eslint-report.txt
-
-  # deploy-heroku:
-  #   docker:
-  #     - image: cimg/base:stable
-  #   steps:
-  #     - checkout
-  #     - run:
-  #         name: Install Heroku CLI
-  #         command: curl https://cli-assets.heroku.com/install.sh | sh
-  #     - run:
-  #         name: Authenticate with Heroku
-  #         command: echo "$HEROKU_API_KEY" | heroku auth:token
-  #     - run:
-  #         name: Git Push to Heroku
-  #         command: git push https://git.heroku.com/$HEROKU_APP_NAME.git main
-
-  # deploy-heroku:
-  #   docker:
-  #     - image: cimg/base:stable
-  #   executor: node/default
-  #   steps:
-  #     - setup_remote_docker
-  #     - checkout
-  #     - run:
-  #         name: Authenticate with Heroku
-  #         command: git push https://git.heroku.com/$HEROKU_APP_NAME.git main
-      
+  deploy-heroku:
+    docker:
+      - image: circleci/heroku-cli:latest
+    executor: node/default
+    steps:
+      - checkout
+      - run:
+          name: Install Heroku CLI
+          command: |
+            curl https://cli-assets.heroku.com/install.sh | sh
+      - run:
+          name: Login to Heroku
+          command: echo "$HEROKU_API_KEY" | heroku auth:token
+      - run:
+          name: Deploy to Heroku
+          command: |
+            git remote add heroku https://git.heroku.com/$HEROKU_APP_NAME.git
+            git push heroku main   
 
 workflows:
   lint-test-build:
@@ -120,19 +111,12 @@ workflows:
             - lint
             - test-node
           type: approval
-      # - deploy-heroku:
-      #     filters:
-      #       branches:
-      #         only:
-      #           - main
-      #     requires:
-      #       - deploy-docker
-      #     type: approval
-      # - heroku/deploy-via-git:
-      #     filters:
-      #       branches:
-      #         only:
-      #           - main
-      #     requires:
-      #       - deploy-heroku
-      #     type: approval
+
+  deploy-heroku:
+    jobs:
+      - deploy-heroku:
+          filters:
+            branches:
+              only:
+                - main
+          type: approval
